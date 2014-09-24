@@ -4,7 +4,6 @@ import javax.swing.*;
 
 /**
  * Class representing a 2D array of cells. Holds current and next game state.
- * Draws itself
  */
 public class Mosaic extends JPanel {
 	private int xCells;					// # of x Cells
@@ -13,6 +12,7 @@ public class Mosaic extends JPanel {
 	private int cellGap;				// Gap between cells
 	private Cell[][] currentArray;		// Represents state of current cell array
 	private Cell[][] nextArray;			// Represents state of next cell array
+
 	
 	/**
 	 * Constructor
@@ -92,121 +92,22 @@ public class Mosaic extends JPanel {
 	public void setNextCell(int x, int y, int alive) {
 		nextArray[x][y].setAlive(alive);
 	}
-	
-	/**
-	 * Regenerates the game with a new random grid
-	 */
-	public void regenGrid() {
-		for (int i = 0; i < xCells; i++) {
-			for (int j = 0; j < yCells; j++) {
-				currentArray[i][j].setAlive((int)Math.round(Math.random()));
-			}
-		}	
-	}
 
 	/**
-	 * Completes game mechanicals to move the game forward one time step
-	 * Counts the number of cells alive surrounding a given cell and computes the next state
-	 * for that cell.
+	 * Returns number of cells in X Direction
+	 * @return int
 	 */
-	public void stepGame() {
-		for (int i = 0; i < xCells; i++) {
-			for (int j = 0; j < yCells; j++) {
-				int count = 0;
-				
-				// Counts the number of cells which are alive around the current cell
-				// 9 possible cases to evaluate: Corners, Edges, Center Somewhere
-				
-				// Top Left
-				if (i == 0 && j == 0) {
-					count = currentArray[i+1][j].getAlive() + currentArray[i+1][j+1].getAlive() +
-							currentArray[i][j+1].getAlive();
-				}
-				
-				// Top Right
-				else if (i == (xCells-1) && j == 0) {
-					count = currentArray[i-1][j].getAlive() + currentArray[i-1][j+1].getAlive() +
-							currentArray[i][j+1].getAlive();
-				}
-				
-				// Bottom Right
-				else if (i == (xCells-1) && j == (yCells-1)) {
-					count = currentArray[i-1][j].getAlive() + currentArray[i-1][j-1].getAlive() +
-							currentArray[i][j-1].getAlive();
-				}
-				
-				// Bottom Left
-				else if (i == 0 && j == (yCells-1)) {
-					count = currentArray[i][j-1].getAlive() + currentArray[i+1][j-1].getAlive() +
-							currentArray[i+1][j].getAlive();
-				}
-				
-				// Left Edge
-				else if (i == 0 && j > 0) {
-					count = currentArray[i][j+1].getAlive() + currentArray[i+1][j+1].getAlive() +
-							currentArray[i+1][j].getAlive() + currentArray[i+1][j-1].getAlive() +
-							currentArray[i][j-1].getAlive();
-				}
-				
-				// Top Edge
-				else if (i > 0 && j == 0) {
-					count = currentArray[i-1][j].getAlive() + currentArray[i-1][j+1].getAlive() +
-							currentArray[i][j+1].getAlive() + currentArray[i+1][j+1].getAlive() +
-							currentArray[i+1][j].getAlive();
-				}
-
-				// Right Edge
-				else if (i == (xCells-1) && j > 0) {
-					count = currentArray[i][j+1].getAlive() + currentArray[i-1][j+1].getAlive() +
-							currentArray[i-1][j].getAlive() + currentArray[i-1][j-1].getAlive() +
-							currentArray[i][j-1].getAlive();
-				}
-	
-				// Bottom Edge
-				else if (i > 0 && j == (yCells-1)) {
-					count = currentArray[i-1][j].getAlive() + currentArray[i-1][j-1].getAlive() +
-							currentArray[i][j-1].getAlive() + currentArray[i+1][j-1].getAlive() +
-							currentArray[i+1][j].getAlive();
-				}
-				
-				// Anywhere in the middle, not touching an edge
-				else {
-					count = currentArray[i-1][j].getAlive() + currentArray[i-1][j-1].getAlive() +
-							currentArray[i][j-1].getAlive() + currentArray[i+1][j-1].getAlive() +
-							currentArray[i+1][j].getAlive() + currentArray[i+1][j+1].getAlive() +
-							currentArray[i][j+1].getAlive() + currentArray[i-1][j+1].getAlive();
-				} // End counting cells
-				
-				
-				// Check Game Rules and set next state of game board
-				if (count < 2) {
-					nextArray[i][j].setAlive(0);
-				}
-				
-				else if ((count == 2 || count == 3) && currentArray[i][j].getAlive() == 1) {
-					nextArray[i][j].setAlive(1);
-				}
-				
-				else if (count > 3) {
-					nextArray[i][j].setAlive(0);
-				}
-				
-				else if (count == 3) {
-					nextArray[i][j].setAlive(1);
-				}
-				
-				else {
-					nextArray[i][j].setAlive(0);
-
-				} // End game rules				
-			}
-		}	
-		
-		// Set currentArray equal to nextArray to move the game forward one time step 
-		for (int k = 0; k < xCells; k++) {
-			for (int l = 0; l < yCells; l++) {
-				currentArray[k][l].setAlive(nextArray[k][l].getAlive());
-			}
-		}
+	public int getXCells() {
+		return xCells;
 	}
+	
+	/**
+	 * Returns number of cells in Y Direction
+	 * @return int
+	 */
+	public int getYCells() {
+		return yCells;
+	}
+
+	
 }

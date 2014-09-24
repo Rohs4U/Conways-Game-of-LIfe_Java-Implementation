@@ -1,16 +1,20 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.event.*;
 import javax.swing.*;
 
 public class GameOfLife extends JPanel {
-	public static Mosaic mosaic;			// Mosaic - the game box
-	public static int delay;				// Delay for game step in ms
-	public static Timer timer;				// Time for game step
-	public static JSlider timeSlider;		// Slider to adjust delay
-	public static JButton timerBtn;			// Button to start/stop game
-	public static int windowX;
-	public static int windowY;
+	public static Mosaic mosaic;				// Mosaic - the game box
+	public static MosaicCellManager manager;	// Manages the Mosaic
+	public static int delay;					// Delay for game step in ms
+	public static Timer timer;					// Time for game step
+	public static JSlider timeSlider;			// Slider to adjust delay
+	public static JButton timerBtn;				// Button to start/stop game
+	public static int windowX;					// Window Size X
+	public static int windowY;					// Window Size Y
+	public static int xCells;					// Number of XCells
+	public static int yCells;					// Number of YCells
 	
 	public static void main(String[] args)
 	{
@@ -33,19 +37,21 @@ public class GameOfLife extends JPanel {
 	public GameOfLife() {
 		// Set All Game Defaults
 		delay = 100;						// Default time step (ms)
-		int numXCells = 80;					// Number of cells in X
-		int numYCells = 80;					// Number of cells in Y
+		xCells = 80;					// Number of cells in X
+		yCells = 80;					// Number of cells in Y
 		int cellSize = 7;					// cell size in px
 		int cellGap = 0;					// gap between cells (not good with light background)
 		int lowerTimeStep = 20;				// Fastest time step
 		int upperTimeStep = 500;			// Slowest time step
-		windowX = numXCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
-		windowY = numYCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
+		windowX = xCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
+		windowY = yCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
+		
 		
 		// Create Objects
 		JPanel centerPanel = new JPanel();
 		JPanel eastPanel= new JPanel();
-		mosaic = new Mosaic (numXCells, numYCells, cellSize, cellGap);
+		mosaic = new Mosaic (xCells, yCells, cellSize, cellGap);
+		manager = new MosaicCellManager(mosaic);
 		JButton btn = new JButton("Reset");
 		JButton step = new JButton("Step");
 		timerBtn = new JButton("Start");
@@ -94,12 +100,12 @@ public class GameOfLife extends JPanel {
 			
 			// Regenerate a new random grid
 			if (command.equals("Reset")) {
-				mosaic.regenGrid();
+				manager.regenGrid();
 			}
 			
 			// Proceed the game forward one step
 			else if (command.equals("Step")) {
-				mosaic.stepGame();
+				manager.stepGame();
 			}
 			
 			// Start or stop the timer
@@ -121,13 +127,12 @@ public class GameOfLife extends JPanel {
 	}
 	
 	/**
-	 * Handles the timer event - steps the game foward each time the timer goes off
+	 * Handles the timer event - steps the game forward each time the timer goes off
 	 *
 	 */
 	private static class TimerHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			mosaic.stepGame();
-			mosaic.repaint();
+			manager.stepGame();
 		}
 	}
 	
@@ -140,4 +145,6 @@ public class GameOfLife extends JPanel {
 			timer.setDelay(timeSlider.getValue());
 		}
 	}
+	
+
 }
