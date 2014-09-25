@@ -4,15 +4,15 @@ import java.awt.event.*;
 import javax.swing.event.*;
 import javax.swing.*;
 
+import views.Mosaic;
+import models.MosaicCellManager;
+
 public class GameOfLife extends JPanel {
 	public static Mosaic mosaic;				// Mosaic - the game box
 	public static MosaicCellManager manager;	// Manages the Mosaic
-	public static int delay;					// Delay for game step in ms
-	public static Timer timer;					// Time for game step
-	public static JSlider timeSlider;			// Slider to adjust delay
-	public static JButton timerBtn;				// Button to start/stop game
-	public static int windowX;					// Window Size X
-	public static int windowY;					// Window Size Y
+
+
+
 	public static int xCells;					// Number of XCells
 	public static int yCells;					// Number of YCells
 	
@@ -21,30 +21,13 @@ public class GameOfLife extends JPanel {
 		// Create content panels
 		GameOfLife content = new GameOfLife();
 
-		// Setup the window and add content to it
-		JFrame window = new JFrame("Conways Game of Life");
-		window.setContentPane(content);
-		window.setSize(windowX, windowY);
-		window.setLocation(100, 100);
-		window.setVisible(true);
-		window.setResizable(false);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	}
 	
 	/**
 	 * Game Constructor
 	 */
 	public GameOfLife() {
-		// Set All Game Defaults
-		delay = 100;						// Default time step (ms)
-		xCells = 80;					// Number of cells in X
-		yCells = 80;					// Number of cells in Y
-		int cellSize = 7;					// cell size in px
-		int cellGap = 0;					// gap between cells (not good with light background)
-		int lowerTimeStep = 20;				// Fastest time step
-		int upperTimeStep = 500;			// Slowest time step
-		windowX = xCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
-		windowY = yCells * (cellSize + cellGap) + 110;		// Set Window size to fit everything
+
 		
 		
 		// Create Objects
